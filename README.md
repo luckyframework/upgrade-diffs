@@ -1,13 +1,3 @@
-# upgrade-diffs
+# Upgrade diffs
 
-This is a project written using [Lucky](https://luckyframework.org). Enjoy!
-
-### Setting up the project
-
-1. [Install required dependencies](http://luckyframework.org/guides/installing.html#install-required-dependencies)
-1. Run `bin/setup`
-1. Run `lucky dev` to start the app
-
-### Learning Lucky
-
-Lucky uses the [Crystal](https://crystal-lang.org) programming language. You can learn about Lucky from the [Lucky Guides](http://luckyframework.org/guides).
+* [Diff for v0.9.2 -> v0.10.0-rc1](https://github.com/luckyframework/upgrade-diffs/commit/1ee884eb025daeede627c3b6a05fe78fde5229b4)
