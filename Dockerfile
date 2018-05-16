@@ -14,6 +14,8 @@ RUN DEBIAN_FRONTEND=noninteractive \
   && echo 'deb https://dl.yarnpkg.com/debian/ stable main' | tee /etc/apt/sources.list.d/yarn.list \
   && curl -sL https://deb.nodesource.com/setup_9.x | bash - \
   && apt-get update -qq \
+  # Install Heroku CLI
+  && curl https://cli-assets.heroku.com/install-ubuntu.sh | bash \
   && apt-get install -y \
   curl \
   wget \
@@ -40,8 +42,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
   && cd \
   && rm -rf lucky_cli-0.10.0-rc3 \
   && rm -rf v0.10.0-rc3.tar.gz
-# Install Heroku CLI
-# && curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 
 # Create a directory for our application
 # and set it as the working directory
