@@ -12,17 +12,16 @@ RUN DEBIAN_FRONTEND=noninteractive \
   curl \
   && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
   && echo 'deb https://dl.yarnpkg.com/debian/ stable main' | tee /etc/apt/sources.list.d/yarn.list \
+  && curl -sL https://deb.nodesource.com/setup_9.x | bash - \
   && apt-get update -qq \
   && apt-get install -y \
   curl \
   wget \
   # Needed for certain libraries
   build-essential \
-  # # Needed for postgres gem
-  # libpq-dev \
-  # Needed for asset compilation
-  nodejs\
   yarn \
+  nodejs \
+  postgresql postgresql-contrib \
   # The following are used to trim down the size of the image by removing unneeded data
   && apt-get clean autoclean \
   && apt-get autoremove -y \
@@ -40,9 +39,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
   && mv lucky /usr/local/bin/. \
   && cd \
   && rm -rf lucky_cli-0.10.0-rc3 \
-  && rm -rf v0.10.0-rc3.tar.gz \
-  # Postgres tools
-  apt-get install postgresql postgresql-contrib
+  && rm -rf v0.10.0-rc3.tar.gz
 # Install Heroku CLI
 # && curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 
@@ -61,6 +58,7 @@ RUN shards install
 COPY . $APP_HOME
 
 RUN yarn install --silent \
+  && npm rebuild node-sass --force \
   && yarn dev
 
 # Run our app
