@@ -1,7 +1,9 @@
 version: '3'
 services:
   db:
-    image: postgres
+    image: "postgres:9.6.2-alpine"
+    ports:
+      - 5432:5432
   web:
     build: .
     volumes:
@@ -10,8 +12,6 @@ services:
       - "5000:5000"
     environment:
       # PORT: "3000"
-      PGHOST: "db"
-      PGUSER: "postgres"
-      # PGDBNAME: "produciton"
+      DATABASE_URL: postgres://postgres@db:5432/upgrade-diff-development
     depends_on:
       - db
