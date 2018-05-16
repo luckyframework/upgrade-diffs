@@ -10,8 +10,8 @@ services:
       - .:/produciton
     ports:
       - "5000:5000"
-    environment:
+    # environment:
       # PORT: "3000"
-      DATABASE_URL: postgres://postgres@db:5432/upgrade-diff-development
+      # DATABASE_URL: postgres://postgres@db:5432/upgrade-diff-development
     depends_on:
       - db
