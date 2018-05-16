@@ -5,14 +5,23 @@ FROM crystallang/crystal:0.24.1
 ENV APP_HOME /produciton
 
 # Installation of dependencies
-RUN apt-get update -qq \
+
+RUN DEBIAN_FRONTEND=noninteractive \
+  apt-get update -qq \
   && apt-get install -y \
+  curl \
+  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+  && echo 'deb https://dl.yarnpkg.com/debian/ stable main' | tee /etc/apt/sources.list.d/yarn.list \
+  && apt-get update -qq \
+  && apt-get install -y \
+  curl \
+  wget \
   # Needed for certain libraries
   build-essential \
   # # Needed for postgres gem
   # libpq-dev \
   # Needed for asset compilation
-  nodejs \
+  nodejs\
   yarn \
   # The following are used to trim down the size of the image by removing unneeded data
   && apt-get clean autoclean \
@@ -21,7 +30,21 @@ RUN apt-get update -qq \
   /var/lib/apt \
   /var/lib/dpkg \
   /var/lib/cache \
-  /var/lib/log
+  /var/lib/log \
+  # Install Lucky CLI
+  && wget https://github.com/luckyframework/lucky_cli/archive/v0.10.0-rc3.tar.gz \
+  && tar -zxf v0.10.0-rc3.tar.gz \
+  && cd lucky_cli-0.10.0-rc3 \
+  && crystal deps \
+  && crystal build src/lucky.cr --release --no-debug \
+  && mv lucky /usr/local/bin/. \
+  && cd \
+  && rm -rf lucky_cli-0.10.0-rc3 \
+  && rm -rf v0.10.0-rc3.tar.gz \
+  # Postgres tools
+  apt-get install postgresql postgresql-contrib
+# Install Heroku CLI
+# && curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 
 # Create a directory for our application
 # and set it as the working directory
@@ -31,11 +54,14 @@ WORKDIR $APP_HOME
 # Add our Gemfile
 # and install gems
 
-ADD shards.yml* $APP_HOME/
+COPY shard.yml $APP_HOME/
 RUN shards install
 
 # Copy over our application code
-ADD . $APP_HOME
+COPY . $APP_HOME
+
+RUN yarn install --silent \
+  && yarn dev
 
 # Run our app
 CMD lucky dev
