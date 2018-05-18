@@ -4,7 +4,7 @@ Lucky::Server.configure do
     settings.host = "0.0.0.0"
     settings.port = ENV["PORT"].to_i
   else
-    settings.secret_key_base = "iwI3W6kL7rFOAzsAvHcNgi97N/qeHqnWpHp9JCXsxuQ="
+    settings.secret_key_base = "ZpE5w1QHgg9+jVWsK1LxAjkMhrDxIy0PbC1MbUKB6fQ="
     # Change host/port in config/watch.yml
     # Alternatively, you can set the PORT env to set the port
     settings.host = Lucky::ServerSettings.host
